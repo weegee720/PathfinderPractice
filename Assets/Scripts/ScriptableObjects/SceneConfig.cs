@@ -2,22 +2,35 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+/// Параметры сцены
+/// </summary>
 [CreateAssetMenu(fileName = "SceneConfig", menuName = "ScriptableObjects/SceneConfig")]
 public class SceneConfig : ScriptableObject
 {
+	[Tooltip("Ширина в тайлах")]
 	public int width;
+	[Tooltip("Высота в тайлах")]
 	public int height;
 
+	[Tooltip("Префаб препятствия")]
 	public GameObject obstaclePrefab;
+	[Tooltip("Текстовый файл с расстановкой препятствий")]
 	public TextAsset layoutData;
 
+	/// <summary>
+	/// Парсит расстановку препятствий из текстового файла и возвращает массив
+	/// </summary>
+	/// <returns>Возвращает массив с картой препятствий</returns>
 	public bool[,] ParseLayout()
 	{
 		bool[,] map = new bool[width, height];
 
 		if (layoutData)
 		{
-			string[] lines = layoutData.text.Split(new string[] {"\r\n"}, System.StringSplitOptions.None);
+			string text = layoutData.text.Replace("\r\n", "\n");
+
+			string[] lines = text.Split(new string[] {"\n"}, System.StringSplitOptions.None);
 
 			for (int y = 0; y < lines.Length; y++)
 			{
